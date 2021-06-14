@@ -1,5 +1,10 @@
-# ml-img-classifer-practice
+# keras-cnn-classifer
 
-- [] Traning model
-- [] Import/Export model
-- [] 
+學習 keras cnn 捲積模型圖片分類
+
+目標:
+1. 訓練模型
+2. 儲存與復用模型
+  2-1. 讀取模型並繼續訓練
+  2-2. 讀取既有模型用於預測
+3. 預測資料夾內所有圖片
