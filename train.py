@@ -1,4 +1,4 @@
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.layers import Dense, Conv2D, MaxPool2D, Activation, Flatten
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications import vgg19
@@ -9,7 +9,7 @@ classes = ['maid', 'bunny']
 imageSize = (500, 500)
 
 train_path = 'C:/Users/Proladon/Desktop/ml/train'
-test_path = 'C:/Users/Proladon/Desktop/ml/test/maid'
+test_path = 'C:/Users/Proladon/Desktop/ml/test'
 valid_path = 'C:/Users/Proladon/Desktop/ml/valid'
 
 train_batches = ImageDataGenerator(preprocessing_function = vgg19.preprocess_input)
@@ -32,6 +32,7 @@ valid_batches = valid_batches.flow_from_directory(directory=valid_path,
 
 
 
+# Create New Model
 model = Sequential([
     Conv2D(filters=32, kernel_size=(3,3), activation=relu, padding='same', input_shape=(500, 500, 3)),
     MaxPool2D(pool_size=(2, 2), strides=2),
@@ -40,7 +41,6 @@ model = Sequential([
     Flatten(),
     Dense(units=2, activation='softmax')
 ])
-model.load_weights('maid_v_bunny_model.h5')
 
 model.summary()
 
@@ -48,9 +48,11 @@ model.compile(
   optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy']
 )
 
-model.fit(train_batches,
-          validation_data=valid_batches,
+# model = load_model('models/maid_v_bunny_model') #載入預先訓練的模型
+
+model.fit(test_batches,
+          validation_data=train_batches,
           epochs=20,
           verbose=2)
 
-model.save_weights('maid_v_bunny_model.h5')
+model.save('maid_v_bunny_model')
