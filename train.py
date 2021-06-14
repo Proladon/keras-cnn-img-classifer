@@ -1,16 +1,15 @@
-import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, MaxPool2D, Activation, Flatten
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications import vgg19
 from keras.backend import relu
-from keras.losses import SparseCategoricalCrossentropy
+
 
 classes = ['maid', 'bunny']
 imageSize = (500, 500)
 
 train_path = 'C:/Users/Proladon/Desktop/ml/train'
-test_path = 'C:/Users/Proladon/Desktop/ml/test'
+test_path = 'C:/Users/Proladon/Desktop/ml/test/maid'
 valid_path = 'C:/Users/Proladon/Desktop/ml/valid'
 
 train_batches = ImageDataGenerator(preprocessing_function = vgg19.preprocess_input)
@@ -41,6 +40,7 @@ model = Sequential([
     Flatten(),
     Dense(units=2, activation='softmax')
 ])
+model.load_weights('maid_v_bunny_model.h5')
 
 model.summary()
 
@@ -48,9 +48,9 @@ model.compile(
   optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy']
 )
 
-
 model.fit(train_batches,
           validation_data=valid_batches,
           epochs=20,
           verbose=2)
-model.save_weights('bottleneck_fc_model.h5')
+
+model.save_weights('maid_v_bunny_model.h5')
